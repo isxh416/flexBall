@@ -17,3 +17,4 @@
 3. 发球功能
 
    点击发球后，弹球随机固定在一个位置
+![实例](https://github.com/XH90416/flexBall/blob/main/r1.png)
