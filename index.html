@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>弹力球</title>
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: "幼圆";
+      font-size: larger;
+      font-weight: bold;
+      text-align: center;
+    }
+    #ball {
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      position: absolute;
+      background-image: url(./2.png);
+      background-size: 50px 50px;
+    }
+    #serve {
+      float: left;
+      background-color: burlywood;
+    }
+    #start {
+      float: left;
+      background-color: coral;
+    }
+    #stop {
+      float: left;
+      background-color: burlywood;
+    }
+    #menu {
+      bottom: 0px;
+      position: fixed;
+    }
+  </style>
+  <body style="background-color: honeydew">
+    <div id="wall">
+      <div id="ball"></div>
+      <div id="menu">
+        <div id="serve">发球</div>
+        <div id="start">开始</div>
+        <div id="stop">停止</div>
+      </div>
+    </div>
+    <script>
+      screenHeight = document.documentElement.clientHeight; //可视区域高度
+      screenWidth = document.documentElement.clientWidth; //可视区域宽度
+      //设置发球，开始，停止按钮大小,字体上下居中
+      document.getElementById("serve").style.width = screenWidth / 3 + "px";
+      document.getElementById("serve").style.height =
+        0.08 * screenHeight + "px";
+      document.getElementById("serve").style.lineHeight =
+        0.08 * screenHeight + "px";
+      document.getElementById("start").style.width = screenWidth / 3 + "px";
+      document.getElementById("start").style.height =
+        0.08 * screenHeight + "px";
+      document.getElementById("start").style.lineHeight =
+        0.08 * screenHeight + "px";
+      document.getElementById("stop").style.width = screenWidth / 3 + "px";
+      document.getElementById("stop").style.height = 0.08 * screenHeight + "px";
+      document.getElementById("stop").style.lineHeight =
+        0.08 * screenHeight + "px";
+      //弹球初始位置
+      document.getElementById("ball").style.left =
+        0.5 * (screenWidth - 50) + "px";
+      document.getElementById("ball").style.top =
+        0.5 * (screenHeight * 0.92 - 50) + "px";
+      //点击使球可见
+      document.getElementById("start").onclick = function () {
+        Move();
+      };
+      //点击停止球隐藏
+      document.getElementById("stop").onclick = function () {
+        clearInterval(ballMove); //清除定时器
+      };
+      //点击发球
+      document.getElementById("serve").onclick = function () {
+        clearInterval(ballMove); //清除定时器
+        serve(); //位置随机
+      };
+      //发球函数
+      function serve() {
+        //弹球位置随机
+        document.getElementById("ball").style.left =
+          Math.random() * (screenWidth - 50) + "px";
+        document.getElementById("ball").style.top =
+          Math.random() * (screenHeight * 0.92 - 50) + "px";
+      }
+
+      //运动
+      var speedX = 20; //  横向速度
+      var speedY = 40; //  纵向速度
+      var ballMove;
+      //运动函数
+      function Move() {
+        clearInterval(ballMove);
+        ballMove = setInterval(function () {
+          var l = ball.offsetLeft + speedX; // 横向运动距离
+          var t = ball.offsetTop + speedY; // 纵向运动距离
+          if (t >= screenHeight * 0.92 - ball.offsetHeight) {
+            //  判断 纵向运动的距离 如果大于 可视区高度-物体的高度
+            speedY *= -1; // 设置纵向速度 为负数 反向运动  （相当于回弹）
+            t = screenHeight * 0.92 - ball.offsetHeight;
+            // 设置纵向运动距离最大 为可视区高度-物体的高度  防止越界
+          } else if (t < 0) {
+            speedY *= -1; // 当小球从 最下面运动到最上面  再次把速度设置为正数 回弹
+            t = 0; // 防止越界
+          }
+          //  横向运动与 纵向运动 一样
+          if (l >= screenWidth - ball.offsetWidth) {
+            speedX *= -1;
+            l = screenWidth - ball.offsetWidth;
+          } else if (l < 0) {
+            speedX *= -1;
+            l = 0;
+          }
+          //开始运动
+          ball.style.left = l + "px";
+          ball.style.top = t + "px";
+        }, 30);
+      }
+    </script>
+  </body>
+</html>
